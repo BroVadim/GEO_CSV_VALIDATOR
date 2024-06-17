@@ -8,8 +8,10 @@ def columns_validator(
     columns : List[str]
     )->bool:
     method_columns = {
-        'markers':['lat1','lon1','popup1','marker_size'],
-        'route':['lat1', 'lon1', 'lat2','lon2','popup1','popup2','line_width','line_color']
+        'markers':['lat1','lon1','popup1','marker_size','marker_color'],
+        'route':['lat1', 'lon1', 'lat2','lon2','popup1','popup2','line_width','line_color'],
+        'polygon':['lat1','lon1'],
+        'heatMap':['lat1','lon1','marker_size']
     }
     try:
         pattern_columns = set(method_columns[method])
@@ -35,12 +37,25 @@ def column_type_validator(
             ('popup1',str),('popup2',str),
             ('line_width','int64'),('line_color',str),
     ]
+    polygon_method = [
+        ('lat1',float),('lon1',float)
+    ]
+    heatMap_method = [
+        ('lat1', float),('lon1', float),
+        ('marker_size','int64')
+    ]
     methods_dfs = {
         'markers': pd.DataFrame(
             {k: pd.Series(dtype=t) for k, t in markers_method}
         ),
         'route': pd.DataFrame(
             {k: pd.Series(dtype=t) for k, t in route_method}
+        ),
+        'polygon': pd.DataFrame(
+            {k: pd.Series(dtype=t) for k,t in polygon_method}
+        ),
+        'heatMap': pd.DataFrame(
+            {k: pd.Series(dtype=t) for k,t in heatMap_method}
         )
     }
     try:
@@ -92,9 +107,9 @@ def coordinates_validator(
             latlng_validation.append(all(validation))
         return all(latlng_validation)
     
-    if method in ['markers','heatmap']:
+    if method in ['markers','heatmap','polygon']:
         cols_count = 2
-    elif method in ['route','graph']:
+    elif method in ['route']:
         cols_count = 4
     else:
         raise TypeError

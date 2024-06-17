@@ -5,9 +5,9 @@ from validator import *
 @pytest.mark.parametrize(
     'method, columns, expected_result',
     [
-        ('markers',['lat1','lon1','popup1','marker_size'],True),
+        ('markers',['lat1','lon1','popup1','marker_size','marker_color'],True),
         ('markers',['lat1', 'lon1', 'lat2','lon2','popup1','popup2','line_width','line_color'],False),
-        ('markers',['lat1', 'lon1','marker_size','lat2','lon2','popup1','popup2','line_width','line_color'],True),
+        ('markers',['lat1', 'lon1','marker_size','lat2','lon2','popup1','popup2','marker_color','line_width','line_color'],True),
         ('markers',['lat1','lon1'],False),
         ('markers',['lat','lon','marker_size'],False),
         ('markers',[1,2,3,4],False),
@@ -18,6 +18,7 @@ from validator import *
         ('markers',[],False),
         ('markers',None,False),
         ('markers','',False),
+
         ('route',['lat1','lon1','popup1','marker_size'],False),
         ('route',['lat1', 'lon1', 'lat2','lon2','popup1','popup2','line_width','line_color'],True),
         ('route',['lat1','lon1'],False),
@@ -30,6 +31,31 @@ from validator import *
         ('route',[],False),
         ('route',None,False),
         ('route','',False),
+
+        ('polygon',['lat1','lon1'], True),
+        ('polygon',['lat1', 'lon1', 'lat2','lon2','popup1','popup2','line_width','line_color'],True),
+        ('polygon',[None,None],False),
+        ('polygon',True,False),
+        ('polygon',False,False),
+        ('polygon',0,False),
+        ('polygon',[],False),
+        ('polygon',None,False),
+        ('polygon','',False),
+        ('polygon',['lat','lon'],False),
+        ('polygon',[1,2,3,4],False),
+
+
+        ('heatMap',['lat1','lon1','marker_size'], True),
+        ('heatMap',['lat1', 'lon1', 'lat2','lon2','popup1','popup2','line_width','line_color','marker_size'],True),
+        ('heatMap',[None,None,None],False),
+        ('heatMap',True,False),
+        ('heatMap',False,False),
+        ('heatMap',0,False),
+        ('heatMap',[],False),
+        ('heatMap',None,False),
+        ('heatMap','',False),
+        ('heatMap',['lat','lon','marker_size'],False),
+        ('heatMap',[1,2,3,4],False),
     ]
 )
 def test_columns_validator(method,columns,expected_result):
